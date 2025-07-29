@@ -5,15 +5,6 @@ import { animate, createTimeline, stagger, text } from 'animejs';
 import BookingCalendar from '../components/BookingCalendar';
 import ImageGallery from '../components/ImageGallery';
 import ContactForm from '../components/ContactForm';
-import { Lato } from 'next/font/google';
-
-const lato = Lato({
-  weight: ['100', '400', '700'],
-  style: ['normal', 'italic'], 
-  subsets: ['latin'],
-  display: 'swap', 
-  variable: '--font-lato'
-});
 
 const FADE_TIME = 0.5;
 
@@ -126,7 +117,7 @@ export default function HomePage() {
         <section id="contact" className="py-20 bg-gray-800 text-white">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold mb-2">Get in Touch</h2>
-            <p className="text-gray-300 mb-12">We'd love to hear from you. Send us a message!</p>
+            <p className="text-gray-300 mb-12">We&apos;d love to hear from you. Send us a message!</p>
             <ContactForm />
           </div>
         </section>
