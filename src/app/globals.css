@@ -24,3 +24,37 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* Add these styles for react-day-picker */
+
+.rdp {
+  --rdp-cell-size: 45px;
+  --rdp-accent-color: #007bff; /* A nice blue for the selected day */
+  --rdp-background-color: #f0f8ff; /* A light blue for the selected day background */
+  margin: 0 auto; /* Center the calendar */
+}
+
+/* Style for our custom 'booked' modifier */
+.my-booked, .my-booked:hover {
+  background-color: #f8d7da; /* A light red to indicate unavailability */
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  text-decoration: line-through;
+  cursor: not-allowed;
+  font-weight: normal;
+}
+
+/* Style for the selected day */
+.my-selected {
+  font-weight: bold;
+  background-color: var(--rdp-accent-color) !important;
+  color: white !important;
+}
+
+/* Style for today's date */
+.my-today {
+  font-weight: bold;
+  color: var(--rdp-accent-color);
+}
+.clip {
+  overflow: hidden;
+}
