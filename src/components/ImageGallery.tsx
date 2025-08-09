@@ -1,60 +1,80 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
-const images = [
-  { src: "/1.jpg", width: 1280, height: 1920 }, // Portrait
-  { src: "/2.jpg", width: 1920, height: 1280 }, // Landscape
-  { src: "/3.jpg", width: 1920, height: 1080 }, // Landscape 16:9
-  { src: "/4.jpg", width: 1080, height: 1350 }, // Portrait 4:5
-  { src: "/5.jpg", width: 1920, height: 1280 }, // Landscape
-  { src: "/6.jpg", width: 1200, height: 1200 }, // Square
-  { src: "/7.jpg", width: 1280, height: 1920 }, // Portrait
-  { src: "/8.jpg", width: 1920, height: 1080 }, // Landscape 16:9
-  { src: "/9.jpg", width: 1080, height: 1350 }, // Portrait 4:5
-  { src: "/10.jpg", width: 1920, height: 1280 }, // Landscape
-  { src: "/11.jpg", width: 1206, height: 1280 }, // Landscape
+import img1 from "../../public/img1.jpg";
+import img2 from "../../public/img2.jpg";
+import img3 from "../../public/img3.jpg";
+import img4 from "../../public/img4.jpg";
+import img5 from "../../public/img5.jpg";
+import img6 from "../../public/img6.jpg";
+import img7 from "../../public/img7.jpg";
+import img8 from "../../public/img8.jpg";
+import img9 from "../../public/img9.jpg";
+import img10 from "../../public/img10.jpg";
+import img11 from "../../public/img11.jpg"
+
+const images: { src: StaticImageData; alt: string }[] = [
+  { src: img1, alt: "Gallery image 1" },
+  { src: img2, alt: "Gallery image 2" },
+  { src: img3, alt: "Gallery image 3" },
+  { src: img4, alt: "Gallery image 4" },
+  { src: img5, alt: "Gallery image 5" },
+  { src: img6, alt: "Gallery image 6" },
+  { src: img7, alt: "Gallery image 7" },
+  { src: img8, alt: "Gallery image 8" },
+  { src: img9, alt: "Gallery image 9" },
+  { src: img10, alt: "Gallery image 10" },
+  { src: img11, alt: "Gallery image 11" },
 ];
 
-const slides = images.map(({ src, width, height }) => ({
-  src,
-  width,
-  height,
+const slides = images.map(({ src }) => ({
+  src: src.src, 
+  width: src.width,
+  height: src.height,
+  alt: "Photo",
 }));
 
 export default function ImageGallery() {
   const [index, setIndex] = useState(-1);
 
+  const sizes =
+    "(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw";
+
   return (
     <>
       <div className="columns-2 md:columns-3 lg:columns-4 gap-4">
-        {images.map(({ src, width, height }, i) => (
-          // --- UPDATED CONTAINER DIV ---
-          // 1. We move the shadows and rounding to this parent div.
-          // 2. We add 'overflow-hidden' to clip the zooming image.
-          // 3. We add a 'group' class for a more advanced hover effect.
-          <div
-            key={src}
+        {images.map(({ src, alt }, i) => (
+          <button
+            key={src.src}
             onClick={() => setIndex(i)}
             className="mb-4 break-inside-avoid cursor-pointer group
                        overflow-hidden rounded-lg shadow-md hover:shadow-xl 
                        transition-all duration-300 ease-in-out"
+            aria-label={`Open image ${i + 1}`}
           >
-            {/* --- UPDATED IMAGE COMPONENT --- */}
-            {/* 1. We apply the scale transform on hover using 'group-hover:scale-105'.
-                2. We remove the shadow and rounding from the image itself. */}
             <Image
               src={src}
-              alt={`Gallery image ${i + 1}`}
-              width={width}
-              height={height}
+              alt={alt}
+              // Next has exact width/height from static import; prevents CLS
+              // Serve smaller files per column via `sizes`
+              sizes={sizes}
+              // Make top-of-page tiles eager/priority (tweak the count to taste)
+              priority={i < 4}
+              fetchPriority={i < 4 ? "high" : "auto"}
+              // Nice LQ placeholder from the static import
+              placeholder="blur"
+              // Speed over pristine: 60–70 is usually plenty
+              quality={70}
+              // Non-priority images decode off the main path
+              decoding={i < 4 ? "auto" : "async"}
               className="w-full h-auto transform 
                          group-hover:scale-105 transition-transform 
                          duration-300 ease-in-out"
             />
-          </div>
+          </button>
         ))}
       </div>
 
@@ -63,6 +83,10 @@ export default function ImageGallery() {
         index={index}
         close={() => setIndex(-1)}
         slides={slides}
+        // 🚫 Don’t preload neighbors on mobile (saves bandwidth & memory)
+        carousel={{ preload: 0 }}
+        // Optional: disable zoom wheel to avoid accidental huge downloads
+        controller={{ closeOnBackdropClick: true }}
       />
     </>
   );
