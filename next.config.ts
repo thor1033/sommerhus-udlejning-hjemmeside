@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     imageSizes: [64, 96, 128, 256, 384, 512],
     minimumCacheTTL: 60 * 60 * 24 * 7,
   },
+  eslint: { ignoreDuringBuilds: false } // default; keep linting on build
 };
 
 export default nextConfig;
