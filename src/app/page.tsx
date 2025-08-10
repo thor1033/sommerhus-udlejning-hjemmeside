@@ -23,7 +23,7 @@ export default function HomePage() {
     // Ensure both videos are GPU-promoted and ready
     const prep = (v: HTMLVideoElement) => {
       v.muted = true;
-      (v as any).playsInline = true;
+      v.playsInline = true;
       v.preload = 'auto';
       v.loop = false;
       v.currentTime = HEAD;
@@ -114,7 +114,6 @@ export default function HomePage() {
     };
   }, []);
 
-  // --- Hero text animation (Anime.js v4) ---
   useEffect(() => {
     const h = document.querySelector('.ml5');
     if (!h) return;
@@ -122,7 +121,7 @@ export default function HomePage() {
     const tl = createTimeline({
       loop: true,
       autoplay: false,
-      defaults: { duration: 700, easing: 'easeInOutExpo' },
+      defaults: { duration: 700, ease: 'easeInOutExpo' },
     });
 
     tl.add('.ml5 .line', { opacity: [0.5, 1], scaleX: [0, 1] })
@@ -157,19 +156,11 @@ export default function HomePage() {
       <main>
         {/* Hero */}
         <section className="relative h-[100dvh] w-full flex items-center justify-center overflow-hidden bg-[#0b1220]">
-          {/* Fallback still under the videos to mask any rare gaps */}
-          <img
-            src="/hero-frame.jpg"
-            alt=""
-            aria-hidden
-            className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
-          />
-
           {/* Background videos (double-buffered, cross-fade) */}
           <video
             ref={vA}
             className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
-            style={{ opacity: 1, willChange: 'opacity', transform: 'translateZ(0)', backfaceVisibility: 'hidden' as any }}
+            style={{ opacity: 1, willChange: 'opacity', transform: 'translateZ(0)', backfaceVisibility: 'hidden'}}
             src="/hero-video.mp4"
             muted
             playsInline
@@ -179,7 +170,7 @@ export default function HomePage() {
           <video
             ref={vB}
             className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
-            style={{ opacity: 0, willChange: 'opacity', transform: 'translateZ(0)', backfaceVisibility: 'hidden' as any }}
+            style={{ opacity: 0, willChange: 'opacity', transform: 'translateZ(0)', backfaceVisibility: 'hidden'}}
             src="/hero-video.mp4"
             muted
             playsInline
